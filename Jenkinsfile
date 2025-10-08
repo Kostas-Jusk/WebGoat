@@ -49,7 +49,7 @@ pipeline {
             steps {
                 withSonarQubeEnv('local-sonarqube') {
                     bat '''
-                        %SONARQUBE_SCANNER_HOME%\\bin\\sonar-scanner.bat ^
+                        "%SONARQUBE_SCANNER_HOME%\\bin\\sonar-scanner.bat" ^
                           -Dsonar.projectKey=Kostas-Jusk_WebGoat ^
                           -Dsonar.sources=src/main/java ^
                           -Dsonar.host.url=http://localhost:9000
