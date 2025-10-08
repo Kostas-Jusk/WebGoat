@@ -1,5 +1,5 @@
 pipeline {
-    agent { label 'build-and-sonar' }
+    agent { label 'agent-1' }
 
     environment {
         MAVEN_HOME = tool 'maven'
