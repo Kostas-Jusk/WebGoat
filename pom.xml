@@ -61,6 +61,10 @@
   </issueManagement>
 
   <properties>
+    <!-- SonarQube -->
+    <sonar.host.url>http://localhost:9000</sonar.host.url>
+    <sonar.projectKey>Kostas-Jusk_WebGoat</sonar.projectKey>
+    <sonar.token>${sonarqube.token}</sonar.token>
     <!-- Shared properties with plugins and version numbers across submodules-->
     <asciidoctorj.version>3.0.0</asciidoctorj.version>
     <bootstrap.version>5.3.5</bootstrap.version>
@@ -98,11 +102,11 @@
     <waittimeForServerStart>60</waittimeForServerStart>
     <webdriver.version>6.3.2</webdriver.version>
     <webgoat.context>/WebGoat</webgoat.context>
-    <webgoat.port>8080</webgoat.port>
+    <webgoat.port>8078</webgoat.port>
     <webgoat.sslenabled>false</webgoat.sslenabled>
     <webjars-locator-core.version>0.59</webjars-locator-core.version>
     <webwolf.context>/WebWolf</webwolf.context>
-    <webwolf.port>9090</webwolf.port>
+    <webwolf.port>8079</webwolf.port>
     <wiremock.version>3.13.1</wiremock.version>
     <xml-resolver.version>1.2</xml-resolver.version>
     <xstream.version>1.4.5</xstream.version>
@@ -428,6 +432,11 @@
 
   <build>
     <plugins>
+      <plugin>
+        <groupId>org.sonarsource.scanner.maven</groupId>
+        <artifactId>sonar-maven-plugin</artifactId>
+        <version>5.2.0.4988</version>
+      </plugin>
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
