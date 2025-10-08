@@ -4,6 +4,7 @@ pipeline {
     environment {
         MAVEN_HOME = tool 'maven'
         SONARQUBE_SCANNER_HOME = tool 'sonar-scanner'
+        JAVA_HOME = tool 'jdk-25'
         SONARQUBE_ENV = 'local-sonarqube'
     }
 
@@ -16,19 +17,25 @@ pipeline {
 
         stage('Build') {
             steps {
-                bat "call \"%MAVEN_HOME%\\bin\\mvn\" clean compile -DskipTests"
+                script {
+                    runMaven("clean compile -DskipTests")
+                }
             }
         }
 
         stage('Unit Test') {
             steps {
-                bat "call \"%MAVEN_HOME%\\bin\\mvn\" test"
+                script {
+                    runMaven("test")
+                }
             }
         }
 
         stage('Integration Test') {
             steps {
-                bat "call \"%MAVEN_HOME%\\bin\\mvn\" verify -DskipUnitTests=true"
+                script {
+                    runMaven("verify -DskipUnitTests=true")
+                }
             }
         }
 
@@ -47,8 +54,18 @@ pipeline {
 
         stage('Package') {
             steps {
-                bat "call \"%MAVEN_HOME%\\bin\\mvn\" package -DskipTests"
+                script {
+                    runMaven("package -DskipTests")
+                }
             }
         }
+    }
+
+    def runMaven(String goals) {
+        bat """
+            set JAVA_HOME=${env.JAVA_HOME}
+            set PATH=%JAVA_HOME%\\bin;%PATH%
+            call "%MAVEN_HOME%\\bin\\mvn" ${goals}
+        """
     }
 }
