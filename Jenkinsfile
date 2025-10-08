@@ -17,55 +17,55 @@ pipeline {
 
         stage('Build') {
             steps {
-                script {
-                    runMaven("clean compile -DskipTests")
-                }
+                bat '''
+                    set JAVA_HOME=%JAVA_HOME%
+                    set PATH=%JAVA_HOME%\\bin;%PATH%
+                    call "%MAVEN_HOME%\\bin\\mvn" clean compile -DskipTests
+                '''
             }
         }
 
         stage('Unit Test') {
             steps {
-                script {
-                    runMaven("test")
-                }
+                bat '''
+                    set JAVA_HOME=%JAVA_HOME%
+                    set PATH=%JAVA_HOME%\\bin;%PATH%
+                    call "%MAVEN_HOME%\\bin\\mvn" test
+                '''
             }
         }
 
         stage('Integration Test') {
             steps {
-                script {
-                    runMaven("verify -DskipUnitTests=true")
-                }
+                bat '''
+                    set JAVA_HOME=%JAVA_HOME%
+                    set PATH=%JAVA_HOME%\\bin;%PATH%
+                    call "%MAVEN_HOME%\\bin\\mvn" verify -DskipUnitTests=true
+                '''
             }
         }
 
         stage('Static Analysis') {
             steps {
                 withSonarQubeEnv('local-sonarqube') {
-                    bat """
+                    bat '''
                         %SONARQUBE_SCANNER_HOME%\\bin\\sonar-scanner.bat ^
                           -Dsonar.projectKey=Kostas-Jusk_WebGoat ^
                           -Dsonar.sources=src/main/java ^
                           -Dsonar.host.url=http://localhost:9000
-                    """
+                    '''
                 }
             }
         }
 
         stage('Package') {
             steps {
-                script {
-                    runMaven("package -DskipTests")
-                }
+                bat '''
+                    set JAVA_HOME=%JAVA_HOME%
+                    set PATH=%JAVA_HOME%\\bin;%PATH%
+                    call "%MAVEN_HOME%\\bin\\mvn" package -DskipTests
+                '''
             }
         }
-    }
-
-    def runMaven(String goals) {
-        bat """
-            set JAVA_HOME=${env.JAVA_HOME}
-            set PATH=%JAVA_HOME%\\bin;%PATH%
-            call "%MAVEN_HOME%\\bin\\mvn" ${goals}
-        """
     }
 }
