@@ -61,9 +61,6 @@
   </issueManagement>
 
   <properties>
-    <!-- SonarQube -->
-    <sonar.host.url>http://localhost:9000</sonar.host.url>
-    <sonar.projectKey>Kostas-Jusk_WebGoat</sonar.projectKey>
     <!-- Shared properties with plugins and version numbers across submodules-->
     <asciidoctorj.version>3.0.0</asciidoctorj.version>
     <bootstrap.version>5.3.5</bootstrap.version>
@@ -97,6 +94,9 @@
     <!-- Use UTF-8 Encoding -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <!-- SonarQube -->
+    <sonar.host.url>http://localhost:9000</sonar.host.url>
+    <sonar.projectKey>Kostas-Jusk_WebGoat</sonar.projectKey>
     <thymeleaf.version>3.1.2.RELEASE</thymeleaf.version>
     <waittimeForServerStart>60</waittimeForServerStart>
     <webdriver.version>6.3.2</webdriver.version>
