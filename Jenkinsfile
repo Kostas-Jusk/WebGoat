@@ -16,19 +16,19 @@ pipeline {
 
         stage('Build') {
             steps {
-                bat "%MAVEN_HOME%\\bin\\mvn clean compile -DskipTests"
+                bat "call \"%MAVEN_HOME%\\bin\\mvn\" clean compile -DskipTests"
             }
         }
 
         stage('Unit Test') {
             steps {
-                bat "%MAVEN_HOME%\\bin\\mvn test"
+                bat "call \"%MAVEN_HOME%\\bin\\mvn\" test"
             }
         }
 
         stage('Integration Test') {
             steps {
-                bat "%MAVEN_HOME%\\bin\\mvn verify -DskipUnitTests=true"
+                bat "call \"%MAVEN_HOME%\\bin\\mvn\" verify -DskipUnitTests=true"
             }
         }
 
@@ -39,7 +39,7 @@ pipeline {
                         %SONARQUBE_SCANNER_HOME%\\bin\\sonar-scanner.bat ^
                           -Dsonar.projectKey=Kostas-Jusk_WebGoat ^
                           -Dsonar.sources=src/main/java ^
-                          -D"sonar.host.url=http://localhost:9000" ^
+                          -Dsonar.host.url=http://localhost:9000
                     """
                 }
             }
@@ -47,7 +47,7 @@ pipeline {
 
         stage('Package') {
             steps {
-                bat "%MAVEN_HOME%\\bin\\mvn package -DskipTests"
+                bat "call \"%MAVEN_HOME%\\bin\\mvn\" package -DskipTests"
             }
         }
     }
