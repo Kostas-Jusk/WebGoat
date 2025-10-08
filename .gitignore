@@ -1,4 +1,4 @@
-build.bat
+setup-environment.bat
 run.bat
 
 /nb-configuration.xml
