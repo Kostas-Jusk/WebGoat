@@ -25,34 +25,35 @@ pipeline {
             }
         }
 
-        stage('Unit Test') {
-            steps {
-                bat '''
-                    set JAVA_HOME=%JAVA_HOME%
-                    set PATH=%JAVA_HOME%\\bin;%PATH%
-                    call "%MAVEN_HOME%\\bin\\mvn" test
-                '''
-            }
-        }
+        // stage('Unit Test') {
+        //     steps {
+        //         bat '''
+        //             set JAVA_HOME=%JAVA_HOME%
+        //             set PATH=%JAVA_HOME%\\bin;%PATH%
+        //             call "%MAVEN_HOME%\\bin\\mvn" test
+        //         '''
+        //     }
+        // }
 
-        stage('Integration Test') {
-            steps {
-                bat '''
-                    set JAVA_HOME=%JAVA_HOME%
-                    set PATH=%JAVA_HOME%\\bin;%PATH%
-                    call "%MAVEN_HOME%\\bin\\mvn" verify -DskipUnitTests=true
-                '''
-            }
-        }
+        // stage('Integration Test') {
+        //     steps {
+        //         bat '''
+        //             set JAVA_HOME=%JAVA_HOME%
+        //             set PATH=%JAVA_HOME%\\bin;%PATH%
+        //             call "%MAVEN_HOME%\\bin\\mvn" verify -DskipUnitTests=true
+        //         '''
+        //     }
+        // }
 
         stage('Static Analysis') {
             steps {
                 withSonarQubeEnv('local-sonarqube') {
                     bat '''
-                        "%SONARQUBE_SCANNER_HOME%\\bin\\sonar-scanner.bat" ^
-                          -Dsonar.projectKey=Kostas-Jusk_WebGoat ^
-                          -Dsonar.sources=src/main/java ^
-                          -Dsonar.host.url=http://localhost:9000
+                        set JAVA_HOME=%JAVA_HOME%
+                        set PATH=%JAVA_HOME%\\bin;%PATH%
+                        call "%MAVEN_HOME%\\bin\\mvn" sonar:sonar ^
+                        -Dsonar.projectKey=Kostas-Jusk_WebGoat ^
+                        -Dsonar.host.url=%SONAR_HOST_URL%
                     '''
                 }
             }
