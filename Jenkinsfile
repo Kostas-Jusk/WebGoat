@@ -79,7 +79,7 @@ pipeline {
 
                         "%NODE_HOME%\\npm.cmd" install -g renovate
 
-                        npx renovate --require-config=false --platform=github --token=%RENOVATE_TOKEN% --log-level debug
+                        npx renovate --require-config=false --platform=github --token=%RENOVATE_TOKEN% --log-level=trace
                     '''
                 }
             }
