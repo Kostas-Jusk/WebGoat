@@ -74,7 +74,13 @@ pipeline {
                 withCredentials([string(credentialsId: '72423783-530c-4723-8815-ec9f0461e727', variable: 'RENOVATE_TOKEN')]) {
                     bat '''
                         set "NODE_PATH=%WORKSPACE%\\..\\..\\..\\..\\node-v22.20.0-win-x64"
-                        "%NODE_PATH%\\npx.cmd" renovate --platform=github --token=%RENOVATE_TOKEN%
+                        set "PATH=%NODE_PATH%;%NODE_PATH%\\node_modules\\.bin;%PATH%"
+                        set "npm_config_cache=%WORKSPACE%\\.npm-cache"
+
+                        if not exist node_modules mkdir node_modules
+                        "%NODE_PATH%\\npm.cmd" install renovate
+                        
+                        "%NODE_PATH%\\node.exe" node_modules\\.bin\\renovate --platform=github --token=%RENOVATE_TOKEN%
                     '''
                 }
             }
