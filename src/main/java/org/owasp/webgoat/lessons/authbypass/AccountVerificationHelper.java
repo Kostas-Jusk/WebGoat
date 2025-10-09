@@ -10,6 +10,11 @@ import java.util.Map;
 /** Created by appsec on 7/18/17. */
 public class AccountVerificationHelper {
 
+  @Override
+  public AccountVerificationHelper clone(){
+    System.out.println("oopsie");
+  }
+
   // simulating database storage of verification credentials
   private static final Integer verifyUserId = 1223445;
   private static final Map<String, String> userSecQuestions = new HashMap<>();
