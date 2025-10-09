@@ -80,7 +80,7 @@ pipeline {
                         if not exist node_modules mkdir node_modules
                         "%NODE_PATH%\\npm.cmd" install renovate
                         
-                        "%NODE_PATH%\\node.exe" node_modules\\.bin\\renovate --platform=github --token=%RENOVATE_TOKEN% --log-level debug
+                        "%NODE_PATH%\\node.exe" node_modules\\.bin\\renovate --require-config=false --platform=github --token=%RENOVATE_TOKEN% --log-level debug
                     '''
                 }
             }
