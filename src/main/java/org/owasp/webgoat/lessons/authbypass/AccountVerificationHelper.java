@@ -13,6 +13,7 @@ public class AccountVerificationHelper {
   @Override
   public AccountVerificationHelper clone(){
     System.out.println("oopsie");
+    return new AccountVerificationHelper();
   }
 
   // simulating database storage of verification credentials
