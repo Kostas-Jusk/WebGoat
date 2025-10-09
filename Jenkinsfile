@@ -15,15 +15,15 @@ pipeline {
             }
         }
 
-        stage('Build') {
-            steps {
-                bat '''
-                    set JAVA_HOME=%JAVA_HOME%
-                    set PATH=%JAVA_HOME%\\bin;%PATH%
-                    call "%MAVEN_HOME%\\bin\\mvn" clean compile -DskipTests
-                '''
-            }
-        }
+        // stage('Build') {
+        //     steps {
+        //         bat '''
+        //             set JAVA_HOME=%JAVA_HOME%
+        //             set PATH=%JAVA_HOME%\\bin;%PATH%
+        //             call "%MAVEN_HOME%\\bin\\mvn" clean compile -DskipTests
+        //         '''
+        //     }
+        // }
 
         // stage('Unit Test') {
         //     steps {
@@ -45,27 +45,38 @@ pipeline {
         //     }
         // }
 
-        stage('Static Analysis') {
+        // stage('Static Analysis') {
+        //     steps {
+        //         withSonarQubeEnv('local-sonarqube') {
+        //             bat '''
+        //                 set JAVA_HOME=%JAVA_HOME%
+        //                 set PATH=%JAVA_HOME%\\bin;%PATH%
+        //                 call "%MAVEN_HOME%\\bin\\mvn" sonar:sonar ^
+        //                 -Dsonar.projectKey=Kostas-Jusk_WebGoat ^
+        //                 -Dsonar.host.url=%SONAR_HOST_URL%
+        //             '''
+        //         }
+        //     }
+        // }
+
+        // stage('Package') {
+        //     steps {
+        //         bat '''
+        //             set JAVA_HOME=%JAVA_HOME%
+        //             set PATH=%JAVA_HOME%\\bin;%PATH%
+        //             call "%MAVEN_HOME%\\bin\\mvn" package -DskipTests
+        //         '''
+        //     }
+        // }
+
+        stage('Dependency Updates (Renovate)') {
             steps {
-                withSonarQubeEnv('local-sonarqube') {
+                withCredentials([string(credentialsId: '72423783-530c-4723-8815-ec9f0461e727', variable: 'RENOVATE_TOKEN')]) {
                     bat '''
-                        set JAVA_HOME=%JAVA_HOME%
-                        set PATH=%JAVA_HOME%\\bin;%PATH%
-                        call "%MAVEN_HOME%\\bin\\mvn" sonar:sonar ^
-                        -Dsonar.projectKey=Kostas-Jusk_WebGoat ^
-                        -Dsonar.host.url=%SONAR_HOST_URL%
+                        set "NODE_PATH=%WORKSPACE%\\..\\..\\..\\..\\node-v22.20.0-win-x64"
+                        "%NODE_PATH%\\npx.cmd" renovate --platform=github --token=%RENOVATE_TOKEN%
                     '''
                 }
-            }
-        }
-
-        stage('Package') {
-            steps {
-                bat '''
-                    set JAVA_HOME=%JAVA_HOME%
-                    set PATH=%JAVA_HOME%\\bin;%PATH%
-                    call "%MAVEN_HOME%\\bin\\mvn" package -DskipTests
-                '''
             }
         }
     }
