@@ -79,7 +79,12 @@ pipeline {
 
                         "%NODE_HOME%\\npm.cmd" install -g renovate
 
-                        npx renovate --require-config=false --platform=github --token=%RENOVATE_TOKEN% --log-level=trace --repositories=Kostas-Jusk/WebGoat
+                        npx renovate --require-config=false --platform=github --token=%RENOVATE_TOKEN% --log-level=debug > renovate.log 2>&1
+                        
+                        echo "idk anymore"
+                        type renovate.log
+                        npx renovate --version
+                        npx renovate --help
                     '''
                 }
             }
