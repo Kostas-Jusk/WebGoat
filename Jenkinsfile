@@ -40,7 +40,7 @@ pipeline {
                 bat '''
                     set JAVA_HOME=%JAVA_HOME%
                     set PATH=%JAVA_HOME%\\bin;%PATH%
-                    call "%MAVEN_HOME%\\bin\\mvn" verify -DskipUnitTests=true -DskipITs
+                    call "%MAVEN_HOME%\\bin\\mvn" verify -DskipUnitTests=true
                 '''
             }
         }
@@ -75,8 +75,9 @@ pipeline {
                     bat '''
                         set "NODE_HOME=%WORKSPACE%\\..\\..\\..\\..\\node-v22.20.0-win-x64"
                         set "PATH=%NODE_HOME%;%PATH%"
+                        set "LOG_LEVEL=debug"
                         
-                        npx renovate --require-config=false --platform=github --token=%RENOVATE_TOKEN% --log-level=debug
+                        npx renovate --require-config=false --platform=github --token=%RENOVATE_TOKEN%
                     '''
                 }
             }
