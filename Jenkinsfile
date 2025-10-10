@@ -77,7 +77,7 @@ pipeline {
                         set "PATH=%NODE_HOME%;%PATH%"
                         set "LOG_LEVEL=debug"
                         
-                        npx renovate --require-config=false --platform=github --token=%RENOVATE_TOKEN%
+                        npx renovate --require-config=false --platform=github --token=%RENOVATE_TOKEN% Kostas-Jusk/WebGoat
                     '''
                 }
             }
