@@ -45,19 +45,19 @@ pipeline {
         //     }
         // }
 
-        stage('Static Analysis') {
-            steps {
-                withSonarQubeEnv('local-sonarqube') {
-                    bat '''
-                        set JAVA_HOME=%JAVA_HOME%
-                        set PATH=%JAVA_HOME%\\bin;%PATH%
-                        call "%MAVEN_HOME%\\bin\\mvn" sonar:sonar ^
-                        -Dsonar.projectKey=Kostas-Jusk_WebGoat ^
-                        -Dsonar.host.url=%SONAR_HOST_URL%
-                    '''
-                }
-            }
-        }
+        // stage('Static Analysis') {
+        //     steps {
+        //         withSonarQubeEnv('local-sonarqube') {
+        //             bat '''
+        //                 set JAVA_HOME=%JAVA_HOME%
+        //                 set PATH=%JAVA_HOME%\\bin;%PATH%
+        //                 call "%MAVEN_HOME%\\bin\\mvn" sonar:sonar ^
+        //                 -Dsonar.projectKey=Kostas-Jusk_WebGoat ^
+        //                 -Dsonar.host.url=%SONAR_HOST_URL%
+        //             '''
+        //         }
+        //     }
+        // }
 
         // stage('Package') {
         //     steps {
@@ -69,25 +69,36 @@ pipeline {
         //     }
         // }
 
-        // stage('Dependency Updates (Renovate)') {
-        //     steps {
-        //         withCredentials([string(credentialsId: '72423783-530c-4723-8815-ec9f0461e727', variable: 'RENOVATE_TOKEN')]) {
-        //             bat '''
-        //                 set "NODE_HOME=%WORKSPACE%\\..\\..\\..\\..\\node-v22.20.0-win-x64"
-        //                 set "PATH=%NODE_HOME%;%WORKSPACE%\\node_modules\\npm\\bin;%PATH%"
-        //                 set "npm_config_cache=C:\\Users\\kostas.juskevicius\\istg_cant_run_anything_on_this_pc_due_to_security\\.npm_cache"
+        stage('Dependency Updates (Renovate)') {
+            steps {
+                withCredentials([string(credentialsId: '72423783-530c-4723-8815-ec9f0461e727', variable: 'RENOVATE_TOKEN')]) {
+                    bat '''
+                        echo "=== ECHO WORKS ==="
 
-        //                 "%NODE_HOME%\\npm.cmd" install -g renovate
+                        set "NODE_HOME=%WORKSPACE%\\..\\..\\..\\..\\node-v22.20.0-win-x64"
+                        set "PATH=%NODE_HOME%;%WORKSPACE%\\node_modules\\npm\\bin;%PATH%"
+                        set "npm_config_cache=C:\\Users\\kostas.juskevicius\\istg_cant_run_anything_on_this_pc_due_to_security\\.npm_cache"
 
-        //                 npx renovate --require-config=false --platform=github --token=%RENOVATE_TOKEN% --log-level=debug > renovate.log 2>&1
+                        echo "=== STARTING RENOVATE DEBUG ==="
                         
-        //                 echo "idk anymore"
-        //                 type renovate.log
-        //                 npx renovate --version
-        //                 npx renovate --help
-        //             '''
-        //         }
-        //     }
-        // }
+                        echo "Current directory:"
+                        cd
+                        
+                        echo "NPX location:"
+                        where npx
+                        
+                        echo "Renovate version:"
+                        npx renovate --version
+                        
+                        echo "=== RUNNING RENOVATE ==="
+                        
+                        npx renovate --require-config=false --platform=github --token=%RENOVATE_TOKEN% --log-level=debug
+                        
+                        echo "Exit code: %ERRORLEVEL%"
+                        echo "=== RENOVATE FINISHED ==="
+                    '''
+                }
+            }
+        }
     }
 }
