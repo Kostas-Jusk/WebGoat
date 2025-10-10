@@ -25,77 +25,58 @@ pipeline {
             }
         }
 
-        // stage('Unit Test') {
-        //     steps {
-        //         bat '''
-        //             set JAVA_HOME=%JAVA_HOME%
-        //             set PATH=%JAVA_HOME%\\bin;%PATH%
-        //             call "%MAVEN_HOME%\\bin\\mvn" test
-        //         '''
-        //     }
-        // }
+        stage('Unit Test') {
+            steps {
+                bat '''
+                    set JAVA_HOME=%JAVA_HOME%
+                    set PATH=%JAVA_HOME%\\bin;%PATH%
+                    call "%MAVEN_HOME%\\bin\\mvn" test
+                '''
+            }
+        }
 
-        // stage('Integration Test') {
-        //     steps {
-        //         bat '''
-        //             set JAVA_HOME=%JAVA_HOME%
-        //             set PATH=%JAVA_HOME%\\bin;%PATH%
-        //             call "%MAVEN_HOME%\\bin\\mvn" verify -DskipUnitTests=true
-        //         '''
-        //     }
-        // }
+        stage('Integration Test') {
+            steps {
+                bat '''
+                    set JAVA_HOME=%JAVA_HOME%
+                    set PATH=%JAVA_HOME%\\bin;%PATH%
+                    call "%MAVEN_HOME%\\bin\\mvn" verify -DskipUnitTests=true
+                '''
+            }
+        }
 
-        // stage('Static Analysis') {
-        //     steps {
-        //         withSonarQubeEnv('local-sonarqube') {
-        //             bat '''
-        //                 set JAVA_HOME=%JAVA_HOME%
-        //                 set PATH=%JAVA_HOME%\\bin;%PATH%
-        //                 call "%MAVEN_HOME%\\bin\\mvn" sonar:sonar ^
-        //                 -Dsonar.projectKey=Kostas-Jusk_WebGoat ^
-        //                 -Dsonar.host.url=%SONAR_HOST_URL%
-        //             '''
-        //         }
-        //     }
-        // }
+        stage('Static Analysis') {
+            steps {
+                withSonarQubeEnv('local-sonarqube') {
+                    bat '''
+                        set JAVA_HOME=%JAVA_HOME%
+                        set PATH=%JAVA_HOME%\\bin;%PATH%
+                        call "%MAVEN_HOME%\\bin\\mvn" sonar:sonar ^
+                        -Dsonar.projectKey=Kostas-Jusk_WebGoat ^
+                        -Dsonar.host.url=%SONAR_HOST_URL%
+                    '''
+                }
+            }
+        }
 
-        // stage('Package') {
-        //     steps {
-        //         bat '''
-        //             set JAVA_HOME=%JAVA_HOME%
-        //             set PATH=%JAVA_HOME%\\bin;%PATH%
-        //             call "%MAVEN_HOME%\\bin\\mvn" package -DskipTests
-        //         '''
-        //     }
-        // }
+        stage('Package') {
+            steps {
+                bat '''
+                    set JAVA_HOME=%JAVA_HOME%
+                    set PATH=%JAVA_HOME%\\bin;%PATH%
+                    call "%MAVEN_HOME%\\bin\\mvn" package -DskipTests
+                '''
+            }
+        }
 
         stage('Dependency Updates (Renovate)') {
             steps {
                 withCredentials([string(credentialsId: '72423783-530c-4723-8815-ec9f0461e727', variable: 'RENOVATE_TOKEN')]) {
                     bat '''
-                        echo "=== ECHO WORKS ==="
-
                         set "NODE_HOME=%WORKSPACE%\\..\\..\\..\\..\\node-v22.20.0-win-x64"
-                        set "PATH=%NODE_HOME%;%WORKSPACE%\\node_modules\\npm\\bin;%PATH%"
-                        set "npm_config_cache=C:\\Users\\kostas.juskevicius\\istg_cant_run_anything_on_this_pc_due_to_security\\.npm_cache"
-
-                        echo "=== STARTING RENOVATE DEBUG ==="
-                        
-                        echo "Current directory:"
-                        cd
-                        
-                        echo "NPX location:"
-                        where npx
-                        
-                        echo "Renovate version:"
-                        npx renovate --version
-                        
-                        echo "=== RUNNING RENOVATE ==="
+                        set "PATH=%NODE_HOME%;%PATH%"
                         
                         npx renovate --require-config=false --platform=github --token=%RENOVATE_TOKEN% --log-level=debug
-                        
-                        echo "Exit code: %ERRORLEVEL%"
-                        echo "=== RENOVATE FINISHED ==="
                     '''
                 }
             }
